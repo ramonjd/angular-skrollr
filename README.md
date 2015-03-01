@@ -15,6 +15,8 @@ bower install skrollr
 
 ## Usage
 
+Configuring pre-angular bootstrap:
+
 ```js
 // 1. configure skrollr in your app config
 var myApp = angular.module('myApp', []);
@@ -26,6 +28,16 @@ myApp.config(["snSkrollrProvider", function(snSkrollrProvider) {
 myApp.run(["snSkrollr", function(snSkrollr) {
   snSkrollr.init();
 }])
+
+```
+
+Configuring at runtime:
+
+```js
+var myApp = angular.module('myApp', []);
+myApp.controller(["myController", "snSkrollr", function(snSkrollr) {
+  snSkrollr.init({ smoothScrolling: true, ... });
+}]);
 
 ```
 
