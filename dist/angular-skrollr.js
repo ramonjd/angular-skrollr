@@ -1,4 +1,4 @@
-/*! angular-skrollr - v0.0.5 - 2015-02-16 */
+/*! angular-skrollr - v0.0.6 - 2015-03-01 */
 "use strict";
 /**
  * Wrap skrollr.js
@@ -15,36 +15,36 @@ angular.module("sn.skrollr", [])
  */
 .provider("snSkrollr", function snSkrollrProvider() {
 
-    var _this = this;
+  var _this = this;
 
-    /**
-     * Skrollr initialisation options
-     * @property {Object} config
-     */
-    this.config = {};
+  /**
+   * Skrollr initialisation options
+   * @property {Object} config
+   */
+  this.config = {};
 
-    /**
-     * Instance of Skrollr
-     * @property {Object}  skrollrInstance
-     */
-    this.skrollrInstance = {};
+  /**
+   * Instance of Skrollr
+   * @property {Object}  skrollrInstance
+   */
+  this.skrollrInstance = {};
 
-    /**
-     * Has the skrollInstance been initialised
-     * @property {Boolean} hasBeenInitialised
-     */
-    this.hasBeenInitialised = false;
+  /**
+   * Has the skrollInstance been initialised
+   * @property {Boolean} hasBeenInitialised
+   */
+  this.hasBeenInitialised = false;
 
-    /**
-     * Methods returned on snSkrollr service
-     * @property {Object} serviceMethods
-     */
-    this.serviceMethods = {};
+  /**
+   * Methods returned on snSkrollr service
+   * @property {Object} serviceMethods
+   */
+  this.serviceMethods = {};
 
-    /**
-     * snSkroller service
-     */
-    this.$get = [
+  /**
+   * snSkroller service
+   */
+  this.$get = [
         "$window",
         "$document",
         "$rootScope",
@@ -54,56 +54,62 @@ angular.module("sn.skrollr", [])
          * @param   {Object}  $document  angular wrapper for document
          * @param   {Object}  $rootScope angular root application scope
          */
-        function($window, $document, $rootScope) {
+        function ($window, $document, $rootScope) {
 
-            _this.serviceMethods = {
+          _this.serviceMethods = {
 
-                /**
-                 * Initialise skrollrjs with config options
-                 * @method init
-                 */
-                init: function() {
+            /**
+             * Initialise skrollrjs with config options
+             * @param   {Object}  config  optional config for instantiation after run
+             * @method init
+             */
+            init: function (config) {
 
-                    var skrollrInit = function skrollrInit(){
-                        _this.skrollrInstance = $window.skrollr.init(_this.config);
-                        _this.hasBeenInitialised = true;
-                        _this.serviceMethods.refresh();
-                    };
+              if (angular.isDefined(config)) {
+                _this.config = config;
+              }
 
-                    $document.ready(function () {
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$apply(skrollrInit);
-                        } else {
-                            skrollrInit();
-                        }
-                    });
+              if (angular.isDefined(_this.config)) {
+                var skrollrInit = function skrollrInit() {
+                  _this.skrollrInstance = $window.skrollr.init(_this.config);
+                  _this.hasBeenInitialised = true;
+                  _this.serviceMethods.refresh();
+                };
 
-                },
+                $document.ready(function () {
+                  if (!$rootScope.$$phase) {
+                    $rootScope.$apply(skrollrInit);
+                  } else {
+                    skrollrInit();
+                  }
+                });
+              }
+            },
 
-                /**
-                 * Call refresh on Skrollr instance
-                 * Useful for resetting skrollr after modifying the DOM
-                 * @method refresh
-                 */
-                refresh: function() {
-                    if (_this.hasBeenInitialised) {
-                        _this.skrollrInstance.refresh();
-                    }
-                },
+            /**
+             * Call refresh on Skrollr instance
+             * Useful for resetting skrollr after modifying the DOM
+             * @method refresh
+             */
+            refresh: function () {
+              if (_this.hasBeenInitialised) {
+                _this.skrollrInstance.refresh();
+              }
+            },
 
-                /**
-                 * Call skrollr.destroy()
-                 * @method refresh
-                 */
-                destroy: function() {
-                    if (_this.hasBeenInitialised) {
-                        _this.skrollrInstance.destroy();
-                        _this.hasBeenInitialised = false;
-                    }
-                }
-            };
+            /**
+             * Call skrollr.destroy()
+             * @method refresh
+             */
+            destroy: function () {
+              if (_this.hasBeenInitialised) {
+                _this.skrollrInstance.destroy();
+                _this.hasBeenInitialised = false;
+              }
+            }
+          };
 
-            return _this.serviceMethods;
+          return _this.serviceMethods;
         }
     ];
 })
@@ -117,12 +123,12 @@ angular.module("sn.skrollr", [])
     /**
      * @constructor
      */
-    function (snSkrollr){
-        return {
-            restrict: "AE",
-            link: function($scope, $element) {
-                snSkrollr.refresh();
-            }
-        };
+    function (snSkrollr) {
+    return {
+      restrict: "AE",
+      link: function ($scope, $element) {
+        snSkrollr.refresh();
+      }
+    };
     }
 ]);
