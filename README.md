@@ -19,7 +19,7 @@ Configuring pre-angular bootstrap:
 
 ```js
 // 1. configure skrollr in your app config
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp', ['sn.skrollr']);
 myApp.config(["snSkrollrProvider", function(snSkrollrProvider) {
   snSkrollrProvider.config = { smoothScrolling: true, ... };
 }]);
@@ -31,12 +31,21 @@ myApp.run(["snSkrollr", function(snSkrollr) {
 
 ```
 
-Configuring at runtime:
+Configuring at runtime (you might want to do this in order to used $scoped vars and funcs in config.constants):
 
 ```js
-var myApp = angular.module('myApp', []);
-myApp.controller(["myController", "snSkrollr", function(snSkrollr) {
-  snSkrollr.init({ smoothScrolling: true, ... });
+var myApp = angular.module('myApp', ['sn.skrollr']);
+myApp.controller("myController", ["$scope", "$window", "snSkrollr", function($scope, $window, snSkrollr) {
+  snSkrollr.init({ 
+    smoothScrolling: true,
+    // skrollr calls constants methods on window.resize
+    constants: {
+      winHeight: function(){
+        $scope.$broadcast('windowHeight', $window.innerHeight):
+        return $window.innerHeight;
+      }
+    }
+  });
 }]);
 
 ```
