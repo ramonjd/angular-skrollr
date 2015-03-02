@@ -31,7 +31,7 @@ myApp.run(["snSkrollr", function(snSkrollr) {
 
 ```
 
-Configuring at runtime (you might want to do this in order to used $scoped vars and funcs in config.constants):
+Configuring at runtime (you might want to do this in order to use $scoped vars and funcs in config.constants, or whatever):
 
 ```js
 var myApp = angular.module('myApp', ['sn.skrollr']);
